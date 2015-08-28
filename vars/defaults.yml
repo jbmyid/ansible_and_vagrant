@@ -1,12 +1,23 @@
 ## webapp
 
 webserver_name: spree.ryanbigg.com
-deploy_directory: /data/spree
-app_name: spree
+deploy_directory: /apps/easy_survey
+app_name: survey
 
+app_repo: git@github.com:railstutorial/sample_app.git
 ## stolen from https://github.com/jgrowl/ansible-playbook-ruby-from-src
 rubyTmpDir: /usr/local/src
 rubyUrl: http://ftp.ruby-lang.org/pub/ruby/2.2/ruby-2.2.2.tar.gz
 rubyCompressedFile: ruby-2.2.2.tar.gz
 rubyName: ruby-2.2.2
 tmpRubyPath: "{{rubyTmpDir}}/{{rubyName}}"
+
+
+# Load balaancer
+user: www-data
+
+# DB
+# psql -U vagrant -h localhost -d survey_prod
+owner: vagrant
+pg_password: vagrant
+database_name: survey_prod

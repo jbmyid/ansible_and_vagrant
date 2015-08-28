@@ -1,0 +1,16 @@
+upstream myapp {
+  {% for host in groups['webservers'] %}
+      server {{ host }};
+  {% endfor %}
+}
+
+server {
+
+  server_name myapp;
+
+  location / {
+
+    proxy_pass  http://myapp;
+
+  }
+}

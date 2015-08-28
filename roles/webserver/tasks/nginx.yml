@@ -1,0 +1,27 @@
+- name: install nginx
+  action: apt name=nginx
+
+- name: write nginx.conf
+  action: template src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
+  notify:
+    - restart nginx
+
+- name: Remove the default app
+  command: rm -rf /etc/nginx/sites-enabled/default
+
+- name: Remove the app's config if exists
+  command: rm -rf /etc/nginx/sites-enabled/default
+
+- name: Remove the app's symlink if exists
+  command: rm -rf /etc/nginx/sites-enabled/spree
+
+- name: Configure nginx for the app
+  template: src=etc_nginx_sites-available_app.conf.j2 dest=/etc/nginx/sites-available/{{app_name}} group=www-data owner=www-data force=yes
+
+- name: Enable the app
+  command: ln -s /etc/nginx/sites-available/spree /etc/nginx/sites-enabled/{{app_name}}
+  notify:
+    - restart nginx
+
+# - name: Restart nginx
+#   action: service name=nginx state=restarted

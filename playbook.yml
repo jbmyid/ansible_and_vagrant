@@ -1,31 +1,28 @@
 ---
-- hosts: all
+- hosts: lbservers
   user: vagrant
   sudo: yes
   vars_files:
     - vars/defaults.yml
+  vars:
+    delete_default_vhost: false
+    user: www-data
+    worker_processes: 16
+    pid: /var/run/nginx.pid
+    worker_connections: 768
+  roles:
+    - lbservers
+- hosts: webservers
+  user: vagrant
+  sudo: yes
+  vars_files:
+    - vars/defaults.yml
+  vars:
+    delete_default_vhost: false
+    user: www-data
+    worker_processes: 16
+    pid: /var/run/nginx.pid
+    worker_connections: 768
   roles:
     - webserver
-  # tasks:
-  #   - name: ruby-from-src | ensure directory temporary ruby download directory is present
-  #     file: state=directory path={{rubyTmpDir}}
-
-  #   - name: ruby-install-src | download
-  #     command: wget -O {{rubyIntsallCompressedFile}} {{rubyInstallUrl}} chdir={{rubyTmpDir}}
-  #   - name: list
-  #     command: ls -l chdir={{rubyTmpDir}}
-  #   - name: ruby-install-src | ensure ruby install is extracted
-  #     command: tar -xzvf {{rubyIntsallCompressedFile}} chdir={{rubyTmpDir}} creates={{tmpRubyInstallPath}}
-
-  #   - name: ruby-install-src | ensure ruby install is installed
-  #     command: sudo make install chdir={{tmpRubyInstallPath}}
-  #   - name: Intsall ruby 2.2
-  #     command: ruby-install ruby 2.2 creates=/usr/local/bin/rubyUrl
-  # tasks:
-  #   - name: upgrade
-  #     action: apt update_cache=yes upgrade=y
-  #   - name: install ruby dependencies
-  #     action: apt pkg={{item}} state=installed
-  #     with_items:
-  #       - build-essential
-  #       - automake
+    - common
