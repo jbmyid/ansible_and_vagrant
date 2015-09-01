@@ -1,16 +1,20 @@
 - name: Create deployment user
   user: name=deploy comment="Application deployment user"
 
-# - authorized_key: user=deploy key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+- authorized_key: user=deploy key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
 
 - name: Create deployment directory
   file: path={{deploy_directory}} owner=deploy group=deploy state=directory
 
-- name: Fix the unknown host github
-  command: sudo ssh-keyscan github.com >> /etc/ssh/ssh_known_hosts
+- name: ssh-keyscan the git server #https://github.com/ansible/ansible/issues/7474
+  shell: ssh-keyscan -H -t dsa {{git_server}} >> ~/.ssh/known_hosts 2>&1
+  sudo: yes
 
 - name: fetch repo
-  git: repo={{app_repo}} dest={{deploy_directory}}
+  git: repo={{app_repo}} dest={{deploy_directory}}/current
+
+- name: remove database.yml
+  command: rm {{deploy_directory}}/current/config/database.yml
 
 - name: Make shared directories
   file: path={{deploy_directory}}/shared/{{item}} group=deploy owner=deploy state=directory
@@ -23,6 +27,27 @@
     - config
     - config/puma
   tags: shared
+- name: Make symlinks for shared
+  file: dest={{deploy_directory}}/current/{{item}} src={{deploy_directory}}/shared/{{item}} state=link force=yes
+  with_items:
+    # - public
+    # - bin
+    # - log
+    - config/puma.rb
+    - config/database.yml
 
 - name: Install database.yml
   template: src=database.yml.j2 dest={{deploy_directory}}/shared/config/database.yml force=yes mode=755 owner=deploy
+
+# - name: install json gem
+#   shell: gem install json -v1.6.6 --platform=ruby
+#   sudo: yes
+
+- name: bundle install
+  command: bundle install --deployment --without="development test"
+  args:
+    chdir: '{{deploy_directory}}/current'
+- name: Precompile assets
+  command: bundle exec rake assets:precompile chdir={{deploy_directory}}/current
+  environment:
+    RAILS_ENV: '{{ rails_env }}'

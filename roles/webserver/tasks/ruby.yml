@@ -24,6 +24,8 @@
     - libxml2-dev
     - libxslt1-dev
     - curl
+    - ruby-dev
+    - ruby1.9.1-dev
 
 - name: Install app dependencies
   action: apt pkg={{item}} state=installed
@@ -39,6 +41,7 @@
 
 - name: ruby-from-src | Download ruby source
   get_url: url={{rubyUrl}} dest={{rubyTmpDir}}
+  # when:
 
 - name: ruby-from-src | ensure ruby is extracted
   command: tar -xzvf {{rubyCompressedFile}} chdir={{rubyTmpDir}} creates={{tmpRubyPath}}
@@ -51,6 +54,21 @@
 
 - name: ruby-from-src | ensure ruby is installed
   command: make install chdir={{tmpRubyPath}} creates=/usr/local/bin/ruby
+
+- name: no ruby docs
+  shell: echo "gem: --no-ri --no-rdoc" > ~/.gemrc
+
+# - name: Install Rvm
+#   shell: curl -L https://get.rvm.io | bash -s stable creates=/usr/local/rvm
+
+# - name: source rvm
+#   command: source /usr/local/rvm/scripts/rvm
+
+# - name: Install ruby 2.2
+#   command: rvm install 2.2.3
+
+# - name: Default ruby
+#   command: rvm use 2.2.3 --default
 
 - name: Install Bundler
   command: gem install bundler

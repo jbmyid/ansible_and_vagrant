@@ -24,5 +24,6 @@
     pid: /var/run/nginx.pid
     worker_connections: 768
   roles:
+    # - { role: rvm_io.rvm1-ruby, tags: ruby, sudo: yes }
     - webserver
-    - common
+    # - common

@@ -1,0 +1,14 @@
+---
+- hosts: all
+  user: vagrant
+  sudo: yes
+  roles:
+    - webserver
+  # tasks:
+  #   - name: upgrade
+  #     action: apt update_cache=yes upgrade=y
+  #   - name: install ruby dependencies
+  #     action: apt pkg={{item}} state=installed
+  #     with_items:
+  #       - build-essential
+  #       - automake

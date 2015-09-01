@@ -4,12 +4,15 @@ webserver_name: spree.ryanbigg.com
 deploy_directory: /apps/easy_survey
 app_name: survey
 
-app_repo: git@github.com:railstutorial/sample_app.git
+app_repo: https://github.com/jbmyid/ruby-rails-sample.git
+git_server: github.com
 ## stolen from https://github.com/jgrowl/ansible-playbook-ruby-from-src
 rubyTmpDir: /usr/local/src
-rubyUrl: http://ftp.ruby-lang.org/pub/ruby/2.2/ruby-2.2.2.tar.gz
-rubyCompressedFile: ruby-2.2.2.tar.gz
-rubyName: ruby-2.2.2
+# 2.1.2p95
+rubyUrl: http://ftp.ruby-lang.org/pub/ruby/2.1/ruby-2.1.7.tar.gz
+# rubyUrl: http://ftp.ruby-lang.org/pub/ruby/2.2/ruby-2.2.2.tar.gz
+rubyCompressedFile: ruby-2.1.7.tar.gz
+rubyName: ruby-2.1.7
 tmpRubyPath: "{{rubyTmpDir}}/{{rubyName}}"
 
 
@@ -21,3 +24,4 @@ user: www-data
 owner: vagrant
 pg_password: vagrant
 database_name: survey_prod
+rails_env: production
