@@ -40,7 +40,7 @@
   file: state=directory path={{rubyTmpDir}}
 
 - name: ruby-from-src | Download ruby source
-  get_url: url={{rubyUrl}} dest={{rubyTmpDir}}
+  get_url: url={{rubyUrl}} dest={{rubyTmpDir}} creates={{rubyCompressedFile}}
   # when:
 
 - name: ruby-from-src | ensure ruby is extracted

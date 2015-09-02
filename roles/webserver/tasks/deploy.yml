@@ -33,7 +33,8 @@
     # - public
     # - bin
     # - log
-    - config/puma.rb
+    - config/puma
+    # - config/puma.rb
     - config/database.yml
 
 - name: Install database.yml
@@ -42,12 +43,3 @@
 # - name: install json gem
 #   shell: gem install json -v1.6.6 --platform=ruby
 #   sudo: yes
-
-- name: bundle install
-  command: bundle install --deployment --without="development test"
-  args:
-    chdir: '{{deploy_directory}}/current'
-- name: Precompile assets
-  command: bundle exec rake assets:precompile chdir={{deploy_directory}}/current
-  environment:
-    RAILS_ENV: '{{ rails_env }}'

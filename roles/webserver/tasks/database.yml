@@ -31,8 +31,3 @@
   postgresql_db: name={{database_name}} owner={{owner}} state=present
   sudo: yes
   sudo_user: postgres
-
-- name: migrate database
-  command: bundle exec rake db:migrate chdir={{deploy_directory}}/current
-  environment:
-    RAILS_ENV: '{{ rails_env }}'

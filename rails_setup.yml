@@ -11,5 +11,5 @@
     pid: /var/run/nginx.pid
     worker_connections: 768
   roles:
+    - common
     - webserver
-    # - common
