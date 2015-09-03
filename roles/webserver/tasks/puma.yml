@@ -20,3 +20,6 @@
 
 - name: Restart puma-manager
   action: service name=puma-manager state=restarted
+
+# To check log for upstart puma manager
+# sudo tail -f /var/log/upstart/puma-_appsasy_survey_current.log

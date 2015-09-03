@@ -1,12 +1,12 @@
 ---
-- name: migrate database
-  command: bundle exec rake db:migrate chdir={{deploy_directory}}/current
-  environment:
-    RAILS_ENV: '{{ rails_env }}'
 - name: bundle install
   command: bundle install --deployment --without="development test"
   args:
     chdir: '{{deploy_directory}}/current'
+- name: migrate database
+  command: bundle exec rake db:migrate chdir={{deploy_directory}}/current
+  environment:
+    RAILS_ENV: '{{ rails_env }}'
 - name: Precompile assets
   command: bundle exec rake assets:precompile chdir={{deploy_directory}}/current
   environment:
@@ -14,16 +14,3 @@
 
 - name: Restart puma-manager
   action: service name=puma-manager state=restarted
-
-# - name: Pid file register
-#   stat: path={{deploy_directory}}/shared/tmp/puma.pid
-#   register: pid_file
-
-# - name: Stop server
-#   shell: kill -TERM $(cat {{deploy_directory}}/shared/tmp/puma.pid}})
-#   when: pid_file.stat.exists
-
-# - name: Start server
-#   command: bundle exec puma -C {{deploy_directory}}/shared/config/puma/production.rb -d
-#   args:
-#     chdir: '{{deploy_directory}}/current'

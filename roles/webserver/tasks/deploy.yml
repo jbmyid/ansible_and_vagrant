@@ -23,18 +23,18 @@
     - log
     - public
     - bundle
-    - bin
-    - config
     - config/puma
   tags: shared
+- name: remove files/folder for shared
+  command: rm -rf {{deploy_directory}}/current/{{item}}
+  with_items:
+    - log
 - name: Make symlinks for shared
   file: dest={{deploy_directory}}/current/{{item}} src={{deploy_directory}}/shared/{{item}} state=link force=yes
+  sudo: yes
   with_items:
-    # - public
-    # - bin
-    # - log
+    - log
     - config/puma
-    # - config/puma.rb
     - config/database.yml
 
 - name: Install database.yml
