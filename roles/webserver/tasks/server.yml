@@ -12,15 +12,18 @@
   environment:
     RAILS_ENV: '{{ rails_env }}'
 
-- name: Pid file register
-  stat: path={{deploy_directory}}/shared/tmp/puma.pid
-  register: pid_file
+- name: Restart puma-manager
+  action: service name=puma-manager state=restarted
 
-- name: Stop server
-  shell: kill -TERM $(cat {{deploy_directory}}/shared/tmp/puma.pid}})
-  when: pid_file.stat.exists
+# - name: Pid file register
+#   stat: path={{deploy_directory}}/shared/tmp/puma.pid
+#   register: pid_file
 
-- name: Start server
-  command: bundle exec puma -C {{deploy_directory}}/shared/config/puma/production.rb -d
-  args:
-    chdir: '{{deploy_directory}}/current'
+# - name: Stop server
+#   shell: kill -TERM $(cat {{deploy_directory}}/shared/tmp/puma.pid}})
+#   when: pid_file.stat.exists
+
+# - name: Start server
+#   command: bundle exec puma -C {{deploy_directory}}/shared/config/puma/production.rb -d
+#   args:
+#     chdir: '{{deploy_directory}}/current'

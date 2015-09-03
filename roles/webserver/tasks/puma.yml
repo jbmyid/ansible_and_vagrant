@@ -18,8 +18,5 @@
   file: path={{deploy_directory}}/shared/tmp/sockets group={{owner}} owner={{owner}} state=directory
   tags: tmp
 
-# - name: Restart puma-manager
-#   action: service name=puma-manager state=restarted
-
-# - name: Restart server
-#   command: bundle exec puma -C {{deploy_directory}}/shared/config/puma/production.rb
+- name: Restart puma-manager
+  action: service name=puma-manager state=restarted
